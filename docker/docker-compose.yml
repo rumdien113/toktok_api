@@ -1,0 +1,64 @@
+services:
+  postgres:
+    container_name: toktok_db
+    image: postgis/postgis:latest
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-toktok}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432" 
+    networks:
+      - toktok_network
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: toktok_pgadmin
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@admin.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: "False" 
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+      # - ../pgadmin:/pgadmin
+    ports:
+      - "5050:80" 
+    networks:
+      - toktok_network
+    restart: unless-stopped
+    depends_on:
+      - postgres
+  
+  toktok_api:
+    container_name: toktok_api
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    command: bash docker/exec.sh 
+    environment:
+      DATABASE_NAME: ${POSTGRES_DB}
+      DATABASE_USER: ${POSTGRES_USER}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_HOST: localhost  
+      DATABASE_PORT: 5432
+    volumes:
+      - ../src:/app/src
+    ports:
+      - "8070:8000"
+    networks:
+      - toktok_network
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+networks:
+  toktok_network:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
