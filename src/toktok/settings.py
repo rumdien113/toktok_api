@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-from dotenv import load_dotenv 
+from dotenv import load_dotenv
 import os
 
 load_dotenv()
@@ -82,11 +82,11 @@ WSGI_APPLICATION = 'toktok.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'toktok'),
-        'USER': os.getenv('POSTGRES_USER', 'postgres'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
-        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
-        'PORT': os.getenv('POSTGRES_PORT', '5432')
+        'NAME': 'toktok',
+        'USER':  'postgres',
+        'PASSWORD':'password',
+        'HOST': 'db',
+        'PORT':  '5432'
     }
 }
 
