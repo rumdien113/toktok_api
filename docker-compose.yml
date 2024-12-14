@@ -17,7 +17,7 @@ services:
 
   db:
     image: postgres:15
-    container_name: postgres_db
+    container_name: toktok_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -27,5 +27,22 @@ services:
     ports:
       - "5433:5432"
 
+  pgadmin:
+    container_name: toktok_pgadmin
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@admin.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+      - ../pgadmin:/pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    depends_on:
+      - db
+
 volumes:
   postgres_data:
+  pgadmin:

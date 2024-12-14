@@ -18,7 +18,7 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser):
-    user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=100, blank=False, null=False)
@@ -26,13 +26,15 @@ class User(AbstractBaseUser):
     lastname = models.CharField(max_length=70)
     birthdate = models.DateField(null=True, blank=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
-    gender = models.CharField(max_length=5, choices=[('M', 'Male'), ('F', 'Female')], default='M')
-    # no yet bio, avatar
+    gender = models.CharField(max_length=10)
+    avatar = models.URLField(blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
+    last_login = None
 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['email', 'username', 'password']
+    REQUIRED_FIELDS = ['username', 'password']
 
     def __str__(self):
         return self.email
