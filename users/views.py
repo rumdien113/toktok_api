@@ -1,11 +1,12 @@
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import authenticate
-from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.hashers import make_password
 
 from toktok import settings
 from .serializers import UserSerializer, UserLoginSerializer
@@ -52,6 +53,7 @@ class LoginView(APIView):
         }, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):
+    permission_classes = (IsAuthenticated,)
     def post(self, request):
         try:
             refresh_token = request.data["refresh"]
@@ -66,6 +68,7 @@ class LogoutView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 class UserListCreateView(APIView):
+    permission_classes = [IsAuthenticated]
     # GET all users
     def get(self, request):
         users = User.objects.all()
@@ -73,6 +76,7 @@ class UserListCreateView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
      
 class UserDetailView(APIView):
+    permission_classes = [IsAuthenticated]
     # GET user_by_id
     def get(self, request, id):
         try:
