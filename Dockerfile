@@ -5,10 +5,10 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # Sao chép các tệp yêu cầu vào container
-COPY requirements.txt /app/requirements.txt
+COPY requirements.txt /app/
 
 # Cài đặt các thư viện cần thiết
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Sao chép toàn bộ mã nguồn vào container
 COPY . /app
