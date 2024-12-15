@@ -18,7 +18,7 @@ SECRET_KEY = 'django-insecure-l%=3g3i2%s4+-%vis2(!p(gy53f+$=*ge8_3kg2jcg^pq7%njr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 APPEND_SLASH = False
 
@@ -82,10 +82,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'toktok',
-        'USER':  'postgres',
-        'PASSWORD':'180104',
-        'HOST': 'localhost',
-        'PORT':  '5432'
+        'USER': 'postgres',
+        'PASSWORD': 'password',
+        'HOST': 'postgres',
+        'PORT': '5432',
     }
 }
 
