@@ -67,29 +67,33 @@ class LogoutView(APIView):
                 'error': str(e)
             }, status=status.HTTP_400_BAD_REQUEST)
 
-class UserListCreateView(APIView):
+class CurrentUserView(APIView):
     permission_classes = [IsAuthenticated]
-    # GET all users
+    
     def get(self, request):
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-     
-class UserDetailView(APIView):
-    permission_classes = [IsAuthenticated]
-    # GET user_by_id
-    def get(self, request, id):
-        try:
-            user = User.objects.get(id=id)
-        except User.DoesNotExist:
-            return Response({
-                'error': 'User not found'
-            }, status=status.HTTP_404_NOT_FOUND)
+        user = request.user
         serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_302_FOUND)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # UPDATE user by id 
-    def put(self, request, id):
+class UserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id=None):
+        if id:
+            try:
+                user = User.objects.get(id=id)
+                serializer = UserSerializer(user)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except User.DoesNotExist:
+                return Response({
+                    'error': 'User not found'
+                }, status=status.HTTP_404_NOT_FOUND)
+        else:
+            users = User.objects.all()
+            serializer = UserSerializer(users, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request, id):
         try:
             user = User.objects.get(id=id)
         except User.DoesNotExist:
