@@ -3,3 +3,4 @@ __pycache__/
 tokven/
 .env/
 *.db 
+.venv/
