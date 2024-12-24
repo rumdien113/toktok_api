@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
 
     'users',
-    'posts'
+    'posts',
+    'likes'
 ]
 
 MIDDLEWARE = [
@@ -86,7 +87,7 @@ DATABASES = {
         'NAME': 'toktok',
         'USER': 'postgres',
         'PASSWORD': 'password',
-        'HOST': 'postgres',
+        'HOST': 'toktok_db',
         'PORT': '5432',
     }
 }
