@@ -37,7 +37,8 @@ INSTALLED_APPS = [
 
     'users',
     'posts',
-    'comments'
+    'comments',
+    'likes'
 ]
 
 MIDDLEWARE = [
@@ -87,7 +88,7 @@ DATABASES = {
         'NAME': 'toktok',
         'USER': 'postgres',
         'PASSWORD': 'password',
-        'HOST': 'postgres',
+        'HOST': 'toktok_db',
         'PORT': '5432',
     }
 }
