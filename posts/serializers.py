@@ -2,10 +2,11 @@ import uuid
 from rest_framework import serializers
 
 from users.models import User
+from users.serializers import UserSerializer
 from .models import Post
 
 class PostSerializer(serializers.ModelSerializer):
-    id_user = serializers.CharField(write_only=True)
+    id_user = UserSerializer(read_only=True)  
     
     class Meta:
         model = Post

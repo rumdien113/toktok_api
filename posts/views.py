@@ -1,3 +1,4 @@
+import random
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -19,19 +20,22 @@ class PostView(APIView):
         }, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, id=None):
+        all_posts = list(Post.objects.all())
+        if not all_posts:
+            return Response({'error': "No posts available"}, status=status.HTTP_404_NOT_FOUND)
+        
         if id:
             try:
-                post = Post.objects.get(id=id)
-                serializer = PostSerializer(post)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                current_post = Post.objects.get(id=id)
             except Post.DoesNotExist:
-                return Response({
-                    'error': 'Post not found'
-                }, status=status.HTTP_404_NOT_FOUND)
+                return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
         else:
-            posts = Post.objects.all()
-            serializer = PostSerializer(posts, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            current_post = random.choice(all_posts)
+        
+        selected_posts = random.sample(all_posts, min(3, len(all_posts)))
+
+        serializer = PostSerializer(selected_posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def patch(self, request, id):
         try:
