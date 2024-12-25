@@ -13,3 +13,13 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+    @property
+    def total_likes(self):
+        from likes.models import Like
+        return Like.objects.filter(target_id=self.id, target_type='post').count()
+    
+    @property
+    def total_comments(self):
+        from comments.models import Comment
+        return Comment.objects.filter(post=self).count()
